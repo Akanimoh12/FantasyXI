@@ -436,6 +436,28 @@ export class AuthService {
   }
 
   /**
+   * Signs in the account whose connected Stellar wallet is `stellarAddress`.
+   * The caller must already have proven control of that key (SEP-10, issue #562);
+   * the session carries the user's real role and permissions like any other login.
+   */
+  public async loginWithStellarAccount(
+    stellarAddress: string,
+    context?: AuthRequestContext
+  ): Promise<AuthResult> {
+    const wallet = await this.db.wallet.findUnique({
+      where: { stellarAddress },
+      include: { user: true },
+    });
+    if (!wallet?.user) {
+      throw new AuthUnauthorizedError("No FantasyXI account is linked to this Stellar wallet");
+    }
+    if (context) {
+      this.signals.record(wallet.user.id, { ip: context.ip });
+    }
+    return this.issueAuthResult(wallet.user);
+  }
+
+  /**
    * Completes a login that was answered with a step-up challenge: a valid
    * code issues the token and remembers the device for future logins.
    * `context` records the sign-in network for Sybil analysis (#274).

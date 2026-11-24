@@ -10,7 +10,6 @@ pub use shielded_batcher::{
     BatchExecutionReport, BatcherConfig, QuarantinedPayout, QueuedPayout, ShieldedBatch,
     ShieldedOutput, MAX_BATCH_SIZE,
 };
-
 use soroban_sdk::xdr::ToXdr;
 use soroban_sdk::{
     contract, contracterror, contractimpl, contracttype, symbol_short, token, Address, Bytes,
@@ -63,8 +62,10 @@ pub enum EscrowError {
     ProposalNotFound = 28,
     AlreadyApproved = 29,
     ProposalExecuted = 30,
-    PauseProposalNotFound = 31,
-    AlreadyProposed = 32,
+    UpgradeNotProposed = 31,
+    InvalidFederationPeer = 32,
+    PauseProposalNotFound = 41,
+    AlreadyProposed = 42,
     LeagueFrozen = 33,
     DisputeActive = 34,
     DisputeWindowOpen = 35,
