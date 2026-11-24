@@ -16,6 +16,7 @@ import financialRoutes from "./financial.routes.js";
 import fxOracleRoutes from "./fxOracle.routes.js";
 import sep8Routes from "./sep8.routes.js";
 import webhookRoutes from "./webhook.routes.js";
+import auditRoutes from "./audit.routes.js";
 import auditAnchorRoutes from "./auditAnchor.routes.js";
 import telemetryRoutes from "./telemetry.routes.js";
 import { replicaReads } from "../middleware/readConsistency.js";
@@ -45,6 +46,7 @@ apiV1Router.use("/fx", fxOracleRoutes);
 // Public: latest proof-of-reserve roots and totals (no participant data)
 apiV1Router.get("/proof-of-reserve", getProofOfReserve);
 apiV1Router.use("/webhooks", webhookRoutes);
+apiV1Router.use("/audit", auditRoutes);
 // Public: on-chain audit anchors for settled gameweeks (digest and verification only)
 apiV1Router.use("/audit-anchors", auditAnchorRoutes);
 apiV1Router.use("/telemetry", telemetryRoutes);

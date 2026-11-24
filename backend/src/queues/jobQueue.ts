@@ -12,6 +12,7 @@ import { runStellarReconciliationJob, STELLAR_RECONCILIATION_CRON, STELLAR_RECON
 import { applyRetroactiveBpsAdjustments } from "../jobs/retroactiveBpsAdjustments.js";
 import { jwtKeyRotationService } from "../services/auth/jwtKeyRotationService.js";
 import { auditLeaguesForCollusion } from "../jobs/leagueIntegrityAudit.js";
+import { anchorPayoutAuditRoot } from "../jobs/payoutAuditAnchor.js";
 import {
   executeFplSyncTask,
   FPL_SYNC_DLQ_NAME,
@@ -70,6 +71,7 @@ export const JOB_DEFINITIONS: JobDefinition[] = [
   // Escrow balance vs ledger drift detection, every 6 hours (issue #560)
   { name: STELLAR_RECONCILIATION_JOB_NAME, cron: STELLAR_RECONCILIATION_CRON, handler: () => runStellarReconciliationJob() },
   { name: "proof-of-reserve", cron: "*/15 * * * *", handler: () => runProofOfReserveJob() },
+  { name: "payout-audit-anchor", cron: "*/15 * * * *", handler: () => anchorPayoutAuditRoot() },
   { name: "retroactive-bps", cron: "*/30 * * * *", handler: () => applyRetroactiveBpsAdjustments() },
   // Pre-publishes the next JWT signing key when due and prunes retired keys (issue #332)
   { name: "jwt-key-rotation", cron: "*/15 * * * *", handler: () => jwtKeyRotationService.rotate() },
